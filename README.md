@@ -29,4 +29,4 @@ Write code in `visualisation/render.js` to draw inputs/outputs
 
 
 ---
-![Screenshot](https://i.ibb.co/k2FQ8DG/Screenshot-79.png)
+![Screenshot](https://ibb.co/5j2xCF1)
