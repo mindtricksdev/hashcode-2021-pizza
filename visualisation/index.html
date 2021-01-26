@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Hashcode Visualisation Tool</title>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <link rel="stylesheet" href="./style.css" />
+  </head>
+  <body>
+    <div id="preview">
+      <canvas id="canvas"></canvas>
+    </div>
+    <div id="rulers">
+      <div id="horizontal-ruler"></div>
+      <div id="vertical-ruler"></div>
+    </div>
+    <div id="timeline">
+      <div id="timeline-prev">Prev</div>
+      <select id="timeline-crt"></select>
+      <div id="timeline-next">Next</div>
+    </div>
+    <div id="sidebar">
+      <div class="sidebar-header">INPUT</div>
+      <div id="sidebar-inputs">
+        <div class="sidebar-item">a_example.txt</div>
+        <div class="sidebar-item active">b_read_on.txt</div>
+        <div class="sidebar-item">c_incunabula.txt</div>
+      </div>
+      <div class="sidebar-header">OUTPUT</div>
+      <div id="sidebar-output-folder">dani</div>
+      <div id="sidebar-outputs">
+        <div class="sidebar-item">a_example.txt</div>
+        <div class="sidebar-item active">b_read_on.txt</div>
+        <div class="sidebar-item">c_incunabula.txt</div>
+      </div>
+      <div class="sidebar-header">SCORE</div>
+      <div id="sidebar-score">0</div>
+      <!-- <div class="sidebar-header">RUNS</div>
+      <div id="sidebar-runs">
+        <div class="sidebar-item">a_example.txt</div>
+        <div class="sidebar-item">b_read_on.txt</div>
+        <div class="sidebar-item">c_incunabula.txt</div>
+      </div> -->
+      <div class="sidebar-header">INFO</div>
+      <div id="sidebar-info"></div>
+      <div class="sidebar-header">SUMMARY</div>
+      <div id="sidebar-summary"></div>
+    </div>
+    <script src="./render.js"></script>
+    <script src="./boot.js"></script>
+  </body>
+</html>

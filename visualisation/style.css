@@ -1,0 +1,147 @@
+@import url("https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap");
+
+body {
+  font-family: Roboto;
+  font-size: 14px;
+}
+#preview {
+  background-color: #ededed;
+  white-space: pre;
+  position: absolute;
+  top: 20px;
+  bottom: 0;
+  left: 20px;
+  right: 300px;
+  overflow: auto;
+}
+#canvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+  transform-origin: top left;
+}
+#sidebar {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  width: 300px;
+  overflow: auto;
+  box-shadow: 2px 3px 4px 1px;
+}
+@media (max-width: 800px) {
+  #sidebar {
+    display: none;
+  }
+  #preview {
+    right: 0;
+  }
+}
+
+.sidebar-header {
+  padding: 8px 6px;
+  font-weight: bold;
+  opacity: 0.8;
+}
+.sidebar-item {
+  padding: 6px 8px;
+  opacity: 0.8;
+}
+.sidebar-item:hover {
+  background-color: rgba(0, 0, 0, 0.1);
+  opacity: 1;
+}
+.sidebar-item.active {
+  background-color: rgba(0, 0, 0, 0.2);
+  opacity: 1;
+}
+.sidebar-item-score {
+  float: right;
+}
+#sidebar-output-folder {
+  position: absolute;
+  right: 0;
+  margin-top: -32px;
+}
+#sidebar-score {
+  position: absolute;
+  right: 0;
+  margin-top: -32px;
+
+  font-weight: bold;
+  margin-right: 6px;
+}
+.sidebar-info-row {
+  position: relative;
+  padding: 6px 8px;
+  height: 12px;
+  border-bottom: 1px solid #dbdbdb;
+}
+.sidebar-info-row .sidebar-info-key {
+  float: left;
+}
+.sidebar-info-row .sidebar-info-value {
+  float: right;
+}
+
+#rulers {
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  z-index: -1;
+}
+.rule-unit {
+  position: absolute;
+  text-align: center;
+}
+#horizontal-ruler .rule-unit {
+  height: 100%;
+}
+#vertical-ruler .rule-unit {
+  width: 100%;
+}
+#horizontal-ruler,
+#vertical-ruler {
+  position: absolute;
+  background-color: rgba(255, 255, 255, 0.1);
+}
+#rulers:hover #horizontal-ruler,
+#rulers:hover #vertical-ruler {
+  background-color: rgba(255, 255, 255, 0.3);
+  opacity: 1;
+}
+.rule-unit {
+  opacity: 0.3;
+}
+.rule-unit:hover {
+  opacity: 1;
+  background-color: white;
+}
+#horizontal-ruler {
+  top: 0;
+  height: 20px;
+  left: 0;
+  right: 0;
+}
+#vertical-ruler {
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 20px;
+}
+
+#timeline {
+  position: absolute;
+  right: 308px;
+  top: 0;
+}
+#timeline-prev,
+#timeline-next,
+#timeline-crt {
+  display: inline-block;
+}
+#timeline-crt {
+  width: 70px;
+}
