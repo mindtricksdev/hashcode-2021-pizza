@@ -1,6 +1,6 @@
 let M, T2, T3, T4, PIZZAS;
 
-const run = (firstLine, input, env) => {
+const run = async (firstLine, input, env) => {
   //parse
   [M, T2, T3, T4] = firstLine;
 
@@ -15,42 +15,40 @@ const run = (firstLine, input, env) => {
   let T3P = [];
   let T4P = [];
 
-  const CONSUMED_PIZZAS = [];
+  let CONSUMED_PIZZAS = [],
+    UNCONSUMED_PIZZAS;
+  UNCONSUMED_PIZZAS = PIZZAS.map((p, i) => i);
 
   //seed
-  const savedData = null; //env.storage.getItem("data" + env.set);
-  if (savedData) {
-    [T2P, T3P, T4P] = savedData;
-  } else {
-    const TXP = [null, null, T2P, T3P, T4P];
-    [T2, T3, T4].forEach((teamsCount, sizeI) => {
-      const size = sizeI + 2;
-      for (let i = 0; i < teamsCount; i++) {
-        if (CONSUMED_PIZZAS.length >= PIZZAS.length - size) {
-          break;
-        }
-        const team = [];
-        for (let p = 0; p < size; p++) {
-          //find a free pizza to send
-          let pizzaIdx = Math.floor(Math.random() * PIZZAS.length);
-          while (CONSUMED_PIZZAS.contains(pizzaIdx)) {
-            pizzaIdx = Math.floor(Math.random() * PIZZAS.length);
-          }
-          team.push(pizzaIdx);
-          CONSUMED_PIZZAS.push(pizzaIdx);
-        }
-        TXP[size].push(...team);
+  const TXP = [null, null, T2P, T3P, T4P];
+  [T2, T3, T4].forEach((teamsCount, sizeI) => {
+    const size = sizeI + 2;
+    for (let i = 0; i < teamsCount; i++) {
+      if (UNCONSUMED_PIZZAS.length < size) {
+        break;
       }
-    });
-  }
+      const team = [];
+      for (let p = 0; p < size; p++) {
+        let pizzaIdx = UNCONSUMED_PIZZAS.pickRandom();
+        team.push(pizzaIdx);
+        CONSUMED_PIZZAS.push(pizzaIdx);
+        UNCONSUMED_PIZZAS.remove(pizzaIdx);
+      }
+      TXP[size].push(...team);
+    }
+  });
 
   //evolve
-  let FINAL_T2P, FINAL_T3P, FINAL_T4P;
+  let FINAL_T2P,
+    FINAL_T3P,
+    FINAL_T4P,
+    LAST_CONSUMED_PIZZAS,
+    LAST_UNCONSUMED_PIZZAS;
   let crtScore = scoreFn(T2P, T3P, T4P);
-  console.log("score", crtScore);
+  env.log.number(crtScore);
   let i = 0;
 
-  while (i < 100) {
+  while (i < 50) {
     //swap
     const NEXT_T2P = T2P.clone().shuffleRandomPart();
     const NEXT_T3P = T3P.clone().shuffleRandomPart();
@@ -58,7 +56,7 @@ const run = (firstLine, input, env) => {
 
     let newScore = scoreFn(NEXT_T2P, NEXT_T3P, NEXT_T4P);
     if (newScore > crtScore) {
-      console.log("++ ", newScore);
+      env.log.number(newScore);
       crtScore = newScore;
       FINAL_T2P = NEXT_T2P;
       FINAL_T3P = NEXT_T3P;
@@ -74,15 +72,40 @@ const run = (firstLine, input, env) => {
   }
 
   i = 0;
-  while (i < 10000) {
-    if (i % 100 === 0) console.log("cross-shuffle", i);
+  const ITERATIONS = 100000;
+  while (i < ITERATIONS) {
+    if (i % 100 === 0) env.log.percent(i / ITERATIONS, "cross-shuffle");
+
     //cross-shuffle
     const pI2 = Math.floor(T2P.length * Math.random());
     const pI3 = Math.floor(T3P.length * Math.random());
     const pI4 = Math.floor(T4P.length * Math.random());
-    const p2 = T2P[pI2];
-    const p3 = T3P[pI3];
-    const p4 = T4P[pI4];
+    let p2 = T2P[pI2];
+    let p3 = T3P[pI3];
+    let p4 = T4P[pI4];
+
+    if (UNCONSUMED_PIZZAS.length > 0) {
+      //try unconsumed pizzas
+      let pizzaIdx = UNCONSUMED_PIZZAS.pickRandom();
+      LAST_CONSUMED_PIZZAS = CONSUMED_PIZZAS.clone();
+      LAST_UNCONSUMED_PIZZAS = UNCONSUMED_PIZZAS.clone();
+      if (Math.random() < 0.3) {
+        CONSUMED_PIZZAS.remove(p2);
+        UNCONSUMED_PIZZAS.push(p2);
+        p2 = pizzaIdx;
+      } else if (Math.random() < 0.3) {
+        CONSUMED_PIZZAS.remove(p3);
+        UNCONSUMED_PIZZAS.push(p3);
+        p3 = pizzaIdx;
+      } else {
+        CONSUMED_PIZZAS.remove(p4);
+        UNCONSUMED_PIZZAS.push(p4);
+        p4 = pizzaIdx;
+      }
+
+      CONSUMED_PIZZAS.push(pizzaIdx);
+      UNCONSUMED_PIZZAS.remove(pizzaIdx);
+    }
 
     const NEXT_T2P = T2P.clone();
     const NEXT_T3P = T3P.clone();
@@ -99,11 +122,15 @@ const run = (firstLine, input, env) => {
 
     let newScore = scoreFn(NEXT_T2P, NEXT_T3P, NEXT_T4P);
     if (newScore > crtScore) {
-      console.log("++ ", newScore);
+      env.log.number(newScore);
       crtScore = newScore;
       FINAL_T2P = NEXT_T2P;
       FINAL_T3P = NEXT_T3P;
       FINAL_T4P = NEXT_T4P;
+    } else {
+      //restore consumed pizzas
+      CONSUMED_PIZZAS = LAST_CONSUMED_PIZZAS;
+      UNCONSUMED_PIZZAS = LAST_UNCONSUMED_PIZZAS;
     }
 
     //re-use best solution
@@ -114,7 +141,7 @@ const run = (firstLine, input, env) => {
     i++;
   }
 
-  while (i < 100) {
+  while (i < 50) {
     //swap
     const NEXT_T2P = T2P.clone().shuffleRandomPart();
     const NEXT_T3P = T3P.clone().shuffleRandomPart();
@@ -122,7 +149,7 @@ const run = (firstLine, input, env) => {
 
     let newScore = scoreFn(NEXT_T2P, NEXT_T3P, NEXT_T4P);
     if (newScore > crtScore) {
-      console.log("++ ", newScore);
+      env.log.number(newScore);
       crtScore = newScore;
       FINAL_T2P = NEXT_T2P;
       FINAL_T3P = NEXT_T3P;
@@ -136,9 +163,6 @@ const run = (firstLine, input, env) => {
 
     i++;
   }
-
-  //save result to local storage for later reuse
-  env.storage.setItem("data" + env.set, [T2P, T3P, T4P]);
 
   //dump
   const result = [[T2P.length / 2 + T3P.length / 3 + T4P.length / 4]];

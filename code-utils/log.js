@@ -7,6 +7,6 @@ module.exports = {
   },
   percent: (subUnitNumber, ...rest) => {
     const number = Math.floor(subUnitNumber * 10000) / 100 + "%";
-    console.log(number);
+    console.log(number, ...rest);
   },
 };
