@@ -29,4 +29,4 @@ Write code in `visualisation/render.js` to draw inputs/outputs
 
 
 ---
-[![Screenshot-83.png](https://i.postimg.cc/ZqsYntkr/Screenshot-83.png)](https://postimg.cc/wtJY4rjv)
+[![Screenshot-84.png](https://i.postimg.cc/Dyv0WfWX/Screenshot-84.png)](https://postimg.cc/bd5pWh9y)
