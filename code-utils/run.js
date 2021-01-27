@@ -8,7 +8,7 @@ const dumper = require("./dumper");
 const array = require("./array");
 const log = require("./log");
 const LocalStorage = require("./storage");
-const storage = new LocalStorage("./code-utils/db.json", {
+const storage = new LocalStorage("./out/storage.json", {
   strict: false,
   ws: "  ",
 });
